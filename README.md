@@ -17,25 +17,7 @@ Ise **har tarah ke system, screen size, aur browser** ke compatible banaya gaya 
 
 ---
 
-## 📱 Har System Ke Liye Kiye Gaye Compatibility Features
 
-1. **Responsive Mobile Navigation (Hamburger Menu):**
-   - Chhote phone screens par navigation bar lamba nahi hota; **`☰ MENU`** button aata hai jo tap karne par khulta hai aur link select karte hi auto-close ho jata hai.
-2. **Horizontal Scrollable Tables (Touch Enabled):**
-   - 8-column members directory aur weekly timetable chhote screens par squish nahi hote.
-   - `-webkit-overflow-scrolling: touch;` ke sath smooth left-right swipe diya gaya hai.
-3. **Universal System Font Stack:**
-   - `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, Arial, sans-serif` use kiya hai taaki Windows par Segoe UI, Mac/iOS par San Francisco, aur Android par Roboto naturally sharp dikhe.
-4. **iOS Safari Zoom Prevention:**
-   - iPhone/iPad par form inputs par tap karne par unwanted auto-zoom nahi hota (inputs set to 16px).
-5. **Private / Incognito Browsing Protection:**
-   - Safari Private Mode ya strict privacy settings me `localStorage` band hone par bhi app crash nahi hota (`try/catch` safety).
-6. **Local Wi-Fi Network Access (`host='0.0.0.0'`):**
-   - Agar aap laptop me Flask server chalate hain, to apne mobile phone ya dusre PC se bhi same Wi-Fi par `http://<your-ip>:5000/` khol kar access kar sakte hain.
-7. **Offline Standalone Mode:**
-   - Internet ya Python na hone par bhi direct **`index.html`** par double click karke poora project smoothly chalega.
-
----
 
 ## 🎯 Key Project Features
 
