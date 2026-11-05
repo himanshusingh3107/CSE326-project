@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Interactive Tesseract Background | Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Base Styles */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-color: #0a0a0a;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-hover: rgba(255, 255, 255, 0.2);
+      --text-primary: #f3f4f6;
+      --text-secondary: #9ca3af;
+      --accent: #e5e7eb;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Fixed Background WebGL Canvas Container */
+    #webgl-bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    #webgl-bg-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Radial Vignette to focus contrast */
+    .bg-vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, rgba(20, 20, 25, 0.1) 0%, rgba(10, 10, 10, 0.85) 85%);
+    }
+
+    /* Portfolio Content Overlay */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.75rem 8%;
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(10, 10, 10, 0.65);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 10;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-dot {
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.25s ease;
+    }
+
+    nav a:hover {
+      color: #fff;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: calc(100vh - 85px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 4rem 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      max-width: 850px;
+    }
+
+    h1 span.gradient-text {
+      background: linear-gradient(135deg, #ffffff 40%, #888888 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lead {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--text-secondary);
+      max-width: 580px;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.85rem 1.8rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: #d4d4d4;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      color: #ffffff;
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--card-border-hover);
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+    }
+
+    /* Section Demo Cards */
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      letter-spacing: -0.02em;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 6rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 2rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--card-border-hover);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .card p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1.25rem 5%;
+      }
+      nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 3D Canvas Background Container -->
+  <div id="webgl-bg-container">
+    <canvas id="webgl-bg-canvas"></canvas>
+  </div>
+  <div class="bg-vignette"></div>
+
+  <!-- Foreground Content -->
+  <header>
+    <div class="logo">
+      <div class="logo-dot"></div>
+      <span>STUDIO // ARCH</span>
+    </div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#work">Projects</a>
+      <a href="#experiments">Experiments</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="badge">
+        <span></span> Hyperdimensional Interactive Canvas
+      </div>
+      <h1>
+        <span class="gradient-text">Architecting digital realities in 4D space.</span>
+      </h1>
+      <p class="lead">
+        Creative developer & designer focused on minimalist, performant WebGL interactions, geometric animations, and high-fidelity interfaces.
+      </p>
+      <div class="cta-group">
+        <a href="#work" class="btn btn-primary">Explore Work</a>
+        <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+      </div>
+    </section>
+
+    <section id="work">
+      <h2 class="section-title">Core Disciplines</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon">◈</div>
+          <h3>4D Geometric Projections</h3>
+          <p>Real-time matrix transformations mapping 4-dimensional hypercubes into 3D viewports with dynamic stereographic projection.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">✦</div>
+          <h3>Low-Overhead WebGL</h3>
+          <p>Sub-millisecond frame updates, vertex buffer optimization, zero DOM-blocking overhead, and adaptive pixel ratios.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">◎</div>
+          <h3>Organic Parallax</h3>
+          <p>Damped dual-axis mouse easing and scroll-synchronized inertia creating tactile depth without interfering with reading flow.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Creative Portfolio. Crafted with Three.js & Modern Web Standards.</p>
+  </footer>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Interactive 3D Background Script -->
+  <script>
+    (function () {
+      'use strict';
+
+      // 1. SETUP RENDERER & SCENE
+      const canvas = document.getElementById('webgl-bg-canvas');
+      const container = document.getElementById('webgl-bg-container');
+
+      const scene = new THREE.Scene();
+
+      // Camera: field of view, aspect ratio, near, far
+      const camera = new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      camera.position.set(0, 0, 7.5);
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        alpha: true,
+        antialias: true,
+        powerPreference: 'high-performance'
+      });
+
+      // Responsive pixel ratio capped at 2 for performance
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setClearColor(0x0a0a0a, 1);
+
+      // Master object group for mouse / scroll parallax transforms
+      const tesseractGroup = new THREE.Group();
+      scene.add(tesseractGroup);
+
+      // 2. DEFINE 4D TESSERACT (HYPERCUBE) TOPOLOGY
+      // A 4D hypercube has 16 vertices: (±1, ±1, ±1, ±1)
+      const baseVertices4D = [];
+      for (let i = 0; i < 16; i++) {
+        baseVertices4D.push([
+          (i & 1) ? 1 : -1,
+          (i & 2) ? 1 : -1,
+          (i & 4) ? 1 : -1,
+          (i & 8) ? 1 : -1
+        ]);
+      }
+
+      // 32 edges connecting vertices that differ in exactly one coordinate (Hamming distance = 1)
+      const edges = [];
+      for (let i = 0; i < 16; i++) {
+        for (let j = i + 1; j < 16; j++) {
+          const bitDiff = (i ^ j);
+          // Check if bitDiff is a power of 2 (only 1 bit difference)
+          if ((bitDiff & (bitDiff - 1)) === 0) {
+            edges.push([i, j]);
+          }
+        }
+      }
+
+      // 3. GENERATE SOFT GLOW TEXTURE FOR VERTICES (Canvas Texture)
+      function createGlowPointTexture() {
+        const size = 64;
+        const glowCanvas = document.createElement('canvas');
+        glowCanvas.width = size;
+        glowCanvas.height = size;
+        const ctx = glowCanvas.getContext('2d');
+
+        const gradient = ctx.createRadialGradient(
+          size / 2, size / 2, 0,
+          size / 2, size / 2, size / 2
+        );
+        // Bright white center fading out to delicate transparent halo
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.7)');
+        gradient.addColorStop(0.55, 'rgba(255, 255, 255, 0.15)');
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, size, size);
+
+        const texture = new THREE.CanvasTexture(glowCanvas);
+        texture.needsUpdate = true;
+        return texture;
+      }
+
+      // 4. MESH BUFFERS (LINES & NODES)
+      // Edges geometry: 32 lines * 2 vertices = 64 vertices * 3 floats
+      const linePositions = new Float32Array(edges.length * 2 * 3);
+      const linesGeometry = new THREE.BufferGeometry();
+      linesGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+
+      const linesMaterial = new THREE.LineBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.22, // Subtle, semi-transparent wireframe
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+
+      const linesMesh = new THREE.LineSegments(linesGeometry, linesMaterial);
+      tesseractGroup.add(linesMesh);
+
+      // Vertices (Nodes) points geometry: 16 points * 3 floats
+      const nodePositions = new Float32Array(16 * 3);
+      const nodesGeometry = new THREE.BufferGeometry();
+      nodesGeometry.setAttribute('position', new THREE.BufferAttribute(nodePositions, 3));
+
+      const nodesMaterial = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.22,
+        map: createGlowPointTexture(),
+        transparent: true,
+        opacity: 0.85, // Glowing nodes
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+
+      const nodesMesh = new THREE.Points(nodesGeometry, nodesMaterial);
+      tesseractGroup.add(nodesMesh);
+
+      // 5. AMBIENT BACKGROUND PARTICLES (Subtle Spatial Dust)
+      const particleCount = 120;
+      const particlePositions = new Float32Array(particleCount * 3);
+      for (let i = 0; i < particleCount; i++) {
+        particlePositions[i * 3 + 0] = (Math.random() - 0.5) * 18;
+        particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 18;
+        particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 14;
+      }
+      const particleGeo = new THREE.BufferGeometry();
+      particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+
+      const particleMat = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.08,
+        transparent: true,
+        opacity: 0.16,
+        map: createGlowPointTexture(),
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+
+      const particleField = new THREE.Points(particleGeo, particleMat);
+      scene.add(particleField);
+
+      // 6. 4D ROTATION & 3D PERSPECTIVE PROJECTION
+      const projected3D = [];
+      for (let i = 0; i < 16; i++) {
+        projected3D.push(new THREE.Vector3());
+      }
+
+      function update4DHypercube(angleXW, angleZW, angleYW) {
+        // Perspective distance from 4D camera
+        const distance4D = 2.4;
+        const scale = 1.35;
+
+        // Trigonometric rotation values
+        const cosXW = Math.cos(angleXW), sinXW = Math.sin(angleXW);
+        const cosZW = Math.cos(angleZW), sinZW = Math.sin(angleZW);
+        const cosYW = Math.cos(angleYW), sinYW = Math.sin(angleYW);
+
+        for (let i = 0; i < 16; i++) {
+          let [x, y, z, w] = baseVertices4D[i];
+
+          // Rotate around XW plane
+          let x1 = x * cosXW - w * sinXW;
+          let w1 = x * sinXW + w * cosXW;
+
+          // Rotate around ZW plane
+          let z2 = z * cosZW - w1 * sinZW;
+          let w2 = z * sinZW + w1 * cosZW;
+
+          // Rotate around YW plane
+          let y3 = y * cosYW - w2 * sinYW;
+          let w3 = y * sinYW + w2 * cosYW;
+
+          // 4D -> 3D Perspective Projection
+          const factor = scale / (distance4D - w3);
+          projected3D[i].set(x1 * factor, y3 * factor, z2 * factor);
+
+          // Update nodes buffer
+          nodePositions[i * 3 + 0] = projected3D[i].x;
+          nodePositions[i * 3 + 1] = projected3D[i].y;
+          nodePositions[i * 3 + 2] = projected3D[i].z;
+        }
+
+        // Update edges buffer
+        let lineIdx = 0;
+        for (let e = 0; e < edges.length; e++) {
+          const vA = projected3D[edges[e][0]];
+          const vB = projected3D[edges[e][1]];
+
+          linePositions[lineIdx++] = vA.x;
+          linePositions[lineIdx++] = vA.y;
+          linePositions[lineIdx++] = vA.z;
+
+          linePositions[lineIdx++] = vB.x;
+          linePositions[lineIdx++] = vB.y;
+          linePositions[lineIdx++] = vB.z;
+        }
+
+        nodesGeometry.attributes.position.needsUpdate = true;
+        linesGeometry.attributes.position.needsUpdate = true;
+      }
+
+      // 7. INTERACTION (MOUSE & SCROLL PARALLAX WITH SMOOTH EASING)
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetRotX = 0;
+      let targetRotY = 0;
+      let scrollOffset = 0;
+
+      // Mouse & Pointer move listener
+      window.addEventListener('pointermove', function (e) {
+        // Normalized device coordinates (-1 to +1)
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+
+        targetRotY = mouseX * 0.45;
+        targetRotX = -mouseY * 0.35;
+      });
+
+      // Scroll listener for dynamic vertical parallax
+      window.addEventListener('scroll', function () {
+        scrollOffset = window.scrollY || window.pageYOffset;
+      });
+
+      // 8. ANIMATION LOOP & RESOURCE OPTIMIZATION
+      let angle = 0;
+      let isVisible = true;
+
+      // Pause rendering when tab is hidden to save 100% CPU/GPU
+      document.addEventListener('visibilitychange', function () {
+        isVisible = !document.hidden;
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        if (!isVisible) return;
+
+        angle += 0.0075;
+
+        // Update 4D rotation angles
+        const angleXW = angle * 0.8;
+        const angleZW = angle * 0.6;
+        const angleYW = angle * 0.4;
+
+        update4DHypercube(angleXW, angleZW, angleYW);
+
+        // Gentle ambient 3D rotation & floating bob
+        tesseractGroup.rotation.z += 0.0015;
+        tesseractGroup.position.y = Math.sin(angle * 0.8) * 0.18;
+
+        // Smooth mouse parallax damping (linear interpolation / lerp)
+        tesseractGroup.rotation.y += (targetRotY - tesseractGroup.rotation.y) * 0.05;
+        tesseractGroup.rotation.x += (targetRotX - tesseractGroup.rotation.x) * 0.05;
+
+        // Subtle camera response to scroll and mouse
+        const targetCamY = (scrollOffset * -0.0012) + (mouseY * 0.2);
+        const targetCamX = mouseX * 0.3;
+        camera.position.x += (targetCamX - camera.position.x) * 0.04;
+        camera.position.y += (targetCamY - camera.position.y) * 0.04;
+        camera.lookAt(scene.position);
+
+        // Drift ambient particles gently
+        particleField.rotation.y += 0.0004;
+        particleField.rotation.x += 0.0002;
+
+        renderer.render(scene, camera);
+      }
+
+      // 9. WINDOW RESIZE HANDLING
+      window.addEventListener('resize', function () {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      });
+
+      // Start loop
+      animate();
+    })();
+  </script>
+</body>
+</html>

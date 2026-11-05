@@ -1,0 +1,41 @@
+[
+    {
+        "id": 101,
+        "name": "Arjun Sharma",
+        "age": 24,
+        "gender": "Male",
+        "phone": "9876543210",
+        "email": "arjun.fitness@gmail.com",
+        "plan": "Pro Athlete",
+        "batch": "Morning (06:00 AM - 08:00 AM)",
+        "trainer": "Vikram Singh",
+        "join_date": "2026-08-15",
+        "status": "Paid"
+    },
+    {
+        "id": 102,
+        "name": "Pooja Verma",
+        "age": 22,
+        "gender": "Female",
+        "phone": "9812345678",
+        "email": "pooja.v@outlook.com",
+        "plan": "Elite Batalion VIP",
+        "batch": "Evening (06:00 PM - 08:00 PM)",
+        "trainer": "Priya Rawat",
+        "join_date": "2026-09-01",
+        "status": "Paid"
+    },
+    {
+        "id": 103,
+        "name": "Rohan Patel",
+        "age": 28,
+        "gender": "Male",
+        "phone": "9765432190",
+        "email": "rohan.p@gmail.com",
+        "plan": "Basic Warrior",
+        "batch": "Evening (08:00 PM - 10:00 PM)",
+        "trainer": "None",
+        "join_date": "2026-09-10",
+        "status": "Pending"
+    }
+]

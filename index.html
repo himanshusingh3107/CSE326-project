@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>VEER BATALION - Gym Management System</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+
+    <!-- Header with Student's Custom SVG Logo -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="gym-header">
+                <svg width="65" height="65" viewBox="0 0 80 80" aria-label="Gym Logo">
+                    <!-- Circle -->
+                    <circle cx="40" cy="40" r="36" fill="black" stroke="#e63946" stroke-width="3"/>
+                    <!-- Lightning -->
+                    <polygon points="45,12 25,42 38,42 32,68 55,35 42,35" fill="white"/>
+                </svg>
+                <h1>VEER BATALION ELITE FITNESS CLUB</h1>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Toggle Button -->
+        <button class="nav-toggle-btn" onclick="toggleNav()" aria-label="Toggle navigation menu">
+            ☰ MENU
+        </button>
+
+        <!-- Navigation Bar -->
+        <nav class="navbar" id="navbarMenu">
+            <a href="#home">Home</a>
+            <a href="#plans">Membership Plans</a>
+            <a href="#register">Register Member</a>
+            <a href="#members">Members List</a>
+            <a href="#bmi">BMI Calculator</a>
+            <a href="#schedule">Workout Schedule</a>
+            <a href="#contact">Contact Us</a>
+        </nav>
+    </header>
+
+    <!-- Motivational Marquee -->
+    <marquee behavior="scroll" direction="left" scrollamount="8" class="gym-marquee">
+        🔥 WELCOME TO VEER BATALION ELITE FITNESS CLUB • SPECIAL STUDENT DISCOUNT AVAILABLE • ADMISSIONS OPEN FOR 2026 • GET FIT & STAY STRONG 🔥
+    </marquee>
+
+    <!-- Home / Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-box">
+            <h2><span id="typingHeroText" class="typing-hero">BUILD YOUR BODY, FORGE YOUR MIND</span><span class="typing-cursor">|</span></h2>
+            <p>Welcome to Veer Batalion Gym. We offer world class gym equipment, certified personal trainers, and friendly workout environment for beginners and athletes.</p>
+            <div class="hero-buttons">
+                <a href="#register" class="btn btn-red">Join Gym Now</a>
+                <a href="#bmi" class="btn btn-dark">Calculate Your BMI</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+
+        <!-- Membership Plans Section -->
+        <section id="plans" class="section">
+            <h2 class="section-heading">MEMBERSHIP PLANS</h2>
+            <p class="section-sub">Choose a membership plan according to your fitness goal</p>
+
+            <div class="plans-container">
+                <!-- Plan 1 -->
+                <div class="plan-card">
+                    <h3>Basic Plan</h3>
+                    <div class="price">₹999 <span>/ Month</span></div>
+                    <ul>
+                        <li>✔ General Fitness Area</li>
+                        <li>✔ Locker & Changing Room</li>
+                        <li>✔ Cardio Equipment</li>
+                        <li>✖ Personal Trainer</li>
+                        <li>✖ Diet Consultation</li>
+                    </ul>
+                    <button class="btn btn-red" onclick="selectPlan('Basic Plan')">Select Basic</button>
+                </div>
+
+                <!-- Plan 2 -->
+                <div class="plan-card popular">
+                    <div class="badge">MOST POPULAR</div>
+                    <h3>Standard Plan</h3>
+                    <div class="price">₹1,799 <span>/ Month</span></div>
+                    <ul>
+                        <li>✔ Full Gym Access (All Equipment)</li>
+                        <li>✔ Locker & Shower Facility</li>
+                        <li>✔ Cardio & CrossFit Arena</li>
+                        <li>✔ General Trainer Assistance</li>
+                        <li>✖ 1-on-1 Personal Trainer</li>
+                    </ul>
+                    <button class="btn btn-red" onclick="selectPlan('Standard Plan')">Select Standard</button>
+                </div>
+
+                <!-- Plan 3 -->
+                <div class="plan-card">
+                    <h3>VIP Pro Plan</h3>
+                    <div class="price">₹2,999 <span>/ Month</span></div>
+                    <ul>
+                        <li>✔ 24/7 Unlimited Gym Access</li>
+                        <li>✔ Dedicated Personal Trainer</li>
+                        <li>✔ Personalized Diet Chart</li>
+                        <li>✔ Steam & Sauna Access</li>
+                        <li>✔ Free Gym Shaker & T-Shirt</li>
+                    </ul>
+                    <button class="btn btn-red" onclick="selectPlan('VIP Pro Plan')">Select VIP</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Member Registration Form Section -->
+        <section id="register" class="section">
+            <h2 class="section-heading">NEW MEMBER ADMISSION FORM</h2>
+            <p class="section-sub">Please fill out this form to register a new member in the gym system</p>
+
+            <div class="form-container">
+                <form id="gymForm" onsubmit="handleRegistration(event)">
+                    
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="fullName">Full Name *</label>
+                            <input type="text" id="fullName" placeholder="Enter member's full name" required autocomplete="name">
+                        </div>
+                        <div class="form-field">
+                            <label for="phoneNumber">Mobile Number (10 digits) *</label>
+                            <input type="tel" id="phoneNumber" placeholder="e.g. 9876543210" maxlength="10" required autocomplete="tel">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="emailId">Email Address</label>
+                            <input type="email" id="emailId" placeholder="name@example.com" autocomplete="email">
+                        </div>
+                        <div class="form-field">
+                            <label for="memberAge">Age *</label>
+                            <input type="number" id="memberAge" placeholder="15 to 70" min="15" max="70" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="gender">Gender *</label>
+                            <select id="gender" required>
+                                <option value="">-- Select Gender --</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="membershipPlan">Selected Plan *</label>
+                            <select id="membershipPlan" required>
+                                <option value="">-- Select Plan --</option>
+                                <option value="Basic Plan">Basic Plan (₹999)</option>
+                                <option value="Standard Plan">Standard Plan (₹1,799)</option>
+                                <option value="VIP Pro Plan">VIP Pro Plan (₹2,999)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="shift">Preferred Batch / Shift *</label>
+                            <select id="shift" required>
+                                <option value="Morning (06:00 AM - 08:00 AM)">Morning (06:00 AM - 08:00 AM)</option>
+                                <option value="Evening (05:00 PM - 07:00 PM)">Evening (05:00 PM - 07:00 PM)</option>
+                                <option value="Night (07:30 PM - 09:30 PM)">Night (07:30 PM - 09:30 PM)</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="feeStatus">Fee Status</label>
+                            <select id="feeStatus">
+                                <option value="Paid">Paid</option>
+                                <option value="Pending" selected>Pending</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit" class="btn btn-red">Submit Registration</button>
+                        <button type="reset" class="btn btn-dark">Reset Form</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Members Table Section -->
+        <section id="members" class="section">
+            <h2 class="section-heading">REGISTERED MEMBERS DIRECTORY</h2>
+            <p class="section-sub">Total Members: <span id="totalMembersCount">0</span></p>
+
+            <!-- Search Bar to filter members -->
+            <div class="search-box">
+                <label for="searchInput"><strong>Search Member: </strong></label>
+                <input type="text" id="searchInput" onkeyup="searchMember()" placeholder="Type member name or mobile...">
+            </div>
+
+            <!-- Mobile Swipe Hint -->
+            <div class="table-hint">👉 Swipe table left/right to view all columns on small screens</div>
+
+            <div class="table-container">
+                <table id="membersTable" border="1">
+                    <thead>
+                        <tr>
+                            <th>Sr. No.</th>
+                            <th>Member Name</th>
+                            <th>Mobile</th>
+                            <th>Age / Gender</th>
+                            <th>Plan</th>
+                            <th>Batch</th>
+                            <th>Fee Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="membersTableBody">
+                        <!-- Filled by script.js -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- BMI Calculator Section -->
+        <section id="bmi" class="section">
+            <h2 class="section-heading">BMI CALCULATOR</h2>
+            <p class="section-sub">Check your Body Mass Index (BMI) to see if you are healthy, underweight, or overweight</p>
+
+            <div class="bmi-box">
+                <div class="bmi-inputs">
+                    <div class="form-field">
+                        <label for="heightCm">Height (in cm):</label>
+                        <input type="number" id="heightCm" placeholder="e.g. 175" min="50" max="250">
+                    </div>
+                    <div class="form-field">
+                        <label for="weightKg">Weight (in kg):</label>
+                        <input type="number" id="weightKg" placeholder="e.g. 70" min="20" max="250">
+                    </div>
+                    <button type="button" class="btn btn-red" onclick="calculateBMI()">Calculate BMI</button>
+                </div>
+
+                <div class="bmi-result" id="bmiResult" style="display: none;">
+                    <h3>Your BMI Result:</h3>
+                    <p>Your calculated BMI is: <strong id="bmiNumber">0.0</strong></p>
+                    <p>Category: <span id="bmiCategory" class="bmi-status">Normal</span></p>
+                    <p id="bmiAdvice" class="bmi-msg">Keep up the good workout routine!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Weekly Workout Timetable Section -->
+        <section id="schedule" class="section">
+            <h2 class="section-heading">WEEKLY WORKOUT SCHEDULE</h2>
+            <p class="section-sub">Class timetable for members and trainers</p>
+
+            <!-- Mobile Swipe Hint -->
+            <div class="table-hint">👉 Swipe table left/right to view full schedule on small screens</div>
+
+            <div class="table-container">
+                <table class="schedule-table" border="1">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Morning (6:00 AM - 8:00 AM)</th>
+                            <th>Evening (5:00 PM - 7:00 PM)</th>
+                            <th>Night (7:30 PM - 9:30 PM)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Monday</strong></td>
+                            <td>Chest & Triceps</td>
+                            <td>Cardio & HIIT</td>
+                            <td>Heavy Bench Press</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tuesday</strong></td>
+                            <td>Back & Biceps</td>
+                            <td>Crossfit Workout</td>
+                            <td>Deadlift Training</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Wednesday</strong></td>
+                            <td>Leg Day (Squats)</td>
+                            <td>Abs & Core Workout</td>
+                            <td>Leg Extension & Calves</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Thursday</strong></td>
+                            <td>Shoulders & Traps</td>
+                            <td>Zumba & Aerobics</td>
+                            <td>Military Shoulder Press</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Friday</strong></td>
+                            <td>Arms (Biceps & Triceps)</td>
+                            <td>Fat Burner Circuit</td>
+                            <td>Arm Blaster Drills</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Saturday</strong></td>
+                            <td>Stretching & Mobility</td>
+                            <td>Endurance Run</td>
+                            <td>Open Gym Practice</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sunday</strong></td>
+                            <td colspan="3" style="text-align: center; color: #e63946; font-weight: bold;">Rest Day / Maintenance</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <h2 class="section-heading">CONTACT & LOCATION</h2>
+            <div class="contact-cards">
+                <div class="contact-card">
+                    <h3>📍 Gym Address</h3>
+                    <p>Veer Batalion Fitness Club,<br>Lovely Proffessional University,<br>Phagwara, Punjab - 144411</p>
+                </div>
+                <div class="contact-card">
+                    <h3>📞 Helpline</h3>
+                    <p>Phone: +91 9161180547<br>Email: vs6231588@gmail.com</p>
+                </div>
+                <div class="contact-card">
+                    <h3>⏰ Timings</h3>
+                    <p>Mon - Sat: 06:00 AM - 10:00 PM<br>Sunday: 07:00 AM - 01:00 PM</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer with Academic Project Info -->
+    <footer class="footer">
+        <div class="footer-box">
+            <p><strong>Course:</strong> CSE326 - Internet Programming | <strong>Assessment:</strong> CA2 Project</p>
+            <p><strong>Topic:</strong> Gym Management System (Veer Batalion Elite Fitness Club)</p>
+            <p>© 2026 Veer Batalion Gym. Designed for Academic Submission.</p>
+        </div>
+    </footer>
+
+    <!-- Main JavaScript file -->
+    <script src="static/script.js" defer></script>
+</body>
+</html>
